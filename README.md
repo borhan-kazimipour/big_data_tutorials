@@ -34,7 +34,7 @@ The following does a few things at the same time:
 * Finally it starts Hadoop services and then does nothing! We need Hadoop running for a variety of scenarios. 
 
 ```
-docker run --rm  -v -v /c/Users/borhan/big_data_docker:/home -p 8088:8088 -p 8030:8030 -p 50070:50070 -p 50075:50075 -p 50030:50030 -p 50060:50060 -p 8888:8888 -p 9000:9000 -p 9999:9999 -p 4040:4040 --name bd_cont bd_img 
+docker run --rm  -v /c/Users/borhan/big_data_docker:/home -p 8088:8088 -p 8030:8030 -p 50070:50070 -p 50075:50075 -p 50030:50030 -p 50060:50060 -p 8888:8888 -p 9000:9000 -p 9999:9999 -p 4040:4040 --name bd_cont bd_img 
 ```
 
 We need to run `exec -it` later on to enter to an interactive shells (see below).
