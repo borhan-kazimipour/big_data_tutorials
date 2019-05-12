@@ -106,3 +106,7 @@ Do the followings:
 
 * To exit, run `quit`.
 
+## SBT
+
+SBT provides the ability to build Scala JAR files. Please see the SBT Hello World tutorial for details & instructions.
+
