@@ -108,5 +108,5 @@ Do the followings:
 
 ## SBT
 
-SBT provides the ability to build Scala JAR files. Please see the SBT Hello World tutorial for details & instructions.
+SBT provides the ability to build Scala JAR files. Please see the [SBT Hello World tutorial](./tutorials/015_sbt_hello-world-template/) for details & instructions.
 
