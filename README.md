@@ -31,13 +31,20 @@ The following does a few things at the same time:
 
 * `-p port_number:port_number` maps container ports to local ports. It helps us to see monitor the Hadoop and HBase activities in our browser. More importantly, it helps us to run Jupyter Server on our Docker Container, then connect to it using our browser.
 
-* Finally it starts Hadoop services and then does nothing! We need Hadoop running for a variety of scenarios. 
+* Finally it starts Hadoop services. We need Hadoop running for a variety of scenarios. The process may appear to freeze at the lines:
+
+"Try 'chown --help' for more information. 
+starting historyserver, logging to /opt/hadoop/logs/mapred--historyserver-d936d78dbdf7.out". 
+
+This is fine. Leave this session as-is and open a new terminal session. Enter the following command to create and run a container:
 
 ```
 docker run --rm  -v /c/Users/borhan/big_data_docker:/home -p 8088:8088 -p 8030:8030 -p 50070:50070 -p 50075:50075 -p 50030:50030 -p 50060:50060 -p 8888:8888 -p 9000:9000 -p 9999:9999 -p 4040:4040 --name bd_cont bd_img 
 ```
 
-We need to run `exec -it` later on to enter to an interactive shells (see below).
+Ensure that you replace the path "/c/Users/borhan/big_data_docker" with an appropriate path on your local machine.
+
+We need to run `docker exec -it bd_cont /bin/bash` later on to enter into an interactive shells (see below).
 If everything goes well, you should be able to monitor the services using your browser: e.g. go to [http://localhost:50070](http://localhost:50070).
 
 ![Localhost 50070](./tutorials/000_docker/localhost_50070.png) 
