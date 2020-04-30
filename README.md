@@ -13,17 +13,25 @@ To create a Docker Image, we need a recipe. We already created a `dockerfile` fo
 
 * Open your terminal (e.g. iTerminal, PowerShell or Docker Quickstart Terminal) and go to the folder that you save the docker files. 
 
-* Call `docker-machine status` to make sure docker service is running.
+* Make sure Docker engine is running on your computer. In most OS, you should see Docker icon on your taskbar. On older Windows machines you may call `docker-machine status` to make sure docker service is running.
 
-* Issue `docker build -t bd_img .` This reads looks into the current directory to find a `dockerfile`. If successful, reads and run all the commands in order. If everything goes well, you should have a new image called `bd_img` (you could use any other names).
+* Issue `docker build -t bd_img . ` Please note there is a dot at the end of this command. This reads looks into the current directory to find a `dockerfile`. If successful, reads and run all the commands in order. If everything goes well, you should have a new image called `bd_img` (you could use any other names).
 
 * Run `docker images` to make sure you have the created image.
 
 Congrats! You created your Big Data image. Please note that we do not need to recreate this image again unless we change `dockerfile`. Let's see how we can run it.
 
-## Running Hadoop Daemons
+## Run
 
-The following does a few things at the same time:
+Enter the following command to create and run a container:
+
+```
+docker run --rm  -v /c/Users/borhan/big_data_docker:/home -p 8088:8088 -p 8030:8030 -p 50070:50070 -p 50075:50075 -p 50030:50030 -p 50060:50060 -p 8888:8888 -p 9000:9000 -p 9999:9999 -p 4040:4040 --name bd_cont bd_img 
+```
+
+**Note:** Ensure that you replace the path `/c/Users/borhan/big_data_docker` with an appropriate path on your local machine. You can use `%cd%` in Windows Command Line or `${PWD}` in most other terminals to indicate your current folder instead of specifying an absolute path.
+
+This long command does a few things at the same time:
 
 * Runs our image (see above). A running image is called a Container. We can run an image as multiple containers if we like. In this example, we call our container `bd_cont`.
 
@@ -31,23 +39,23 @@ The following does a few things at the same time:
 
 * `-p port_number:port_number` maps container ports to local ports. It helps us to see monitor the Hadoop and HBase activities in our browser. More importantly, it helps us to run Jupyter Server on our Docker Container, then connect to it using our browser.
 
-* Finally it starts Hadoop services. We need Hadoop running for a variety of scenarios. The process may appear to freeze at the lines:
-
-"Try 'chown --help' for more information. 
-starting historyserver, logging to /opt/hadoop/logs/mapred--historyserver-d936d78dbdf7.out". 
-
-This is fine. Leave this session as-is and open a new terminal session. Enter the following command to create and run a container:
-
+* Finally, it starts Hadoop, HBase and Jupyter services. We need them running for a variety of scenarios. The process may appear to be frozen at the lines similar to:
 ```
-docker run --rm  -v /c/Users/borhan/big_data_docker:/home -p 8088:8088 -p 8030:8030 -p 50070:50070 -p 50075:50075 -p 50030:50030 -p 50060:50060 -p 8888:8888 -p 9000:9000 -p 9999:9999 -p 4040:4040 --name bd_cont bd_img 
-```
+[I 23:28:19.725 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+[W 23:28:20.847 NotebookApp] All authentication is disabled.  Anyone who can connect to this server will be able to run code.
+[I 23:28:20.875 NotebookApp] Serving notebooks from local directory: /home
+[I 23:28:20.876 NotebookApp] The Jupyter Notebook is running at:
+[I 23:28:20.876 NotebookApp] http://75b10f4609f6:8888/
+[I 23:28:20.877 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+``` 
 
-Ensure that you replace the path "/c/Users/borhan/big_data_docker" with an appropriate path on your local machine.
+This is fine. Leave this session as-is and open a new terminal session. We need to run `docker exec -it bd_cont /bin/bash` later on to enter into an interactive shells (see below).
 
-We need to run `docker exec -it bd_cont /bin/bash` later on to enter into an interactive shells (see below).
 If everything goes well, you should be able to monitor the services using your browser: e.g. go to [http://localhost:50070](http://localhost:50070).
 
 ![Localhost 50070](./tutorials/000_docker/localhost_50070.png) 
+
+Try chanigng "50070" in the URL with other ports (e.g., "8088" or "8888") and see what happens!
 
 
 Notes: 
@@ -72,6 +80,8 @@ If everything goes right, you should be able to see something similar to the fol
 
 ## Running Jupyter
 
+The current version runs Jupyter automatically as you execute `docker run...` discussed in the **Run** Section. So, most probably you do not need to run Jupyter manually. But if you do, then follow these steps:
+
 * Go to interactive mode as discussed above.
 
 * Run `./start-jupyter.sh` if you are in the right path (in this example `/home/`) or enter the following command:
@@ -90,6 +100,7 @@ Note that the first command you run a in the Scala notebook may takes a few seco
 ![Spylon Kernel](./tutorials/000_docker/spylon_kernel.png) 
 
 ## Running HBase
+The current version runs HBase automatically as you execute `docker run...` discussed in the **Run** Section. So, most probably you do not need to run it again manually. But if you do, then follow these steps:
 
 Do the followings:
 
