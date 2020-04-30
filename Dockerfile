@@ -27,10 +27,10 @@ RUN \
   openjdk-8-jdk
 
 # install pip, Jupyter, spylon-kernel
-RUN pip3 install --upgrade pip
-RUN pip install jupyter
-RUN pip install spylon-kernel
-RUN python3 -m spylon_kernel install
+RUN pip3 install --upgrade pip && \
+  pip3 install jupyter && \
+  pip3 install spylon-kernel && \
+  python3 -m spylon_kernel install
 
 
 # download and extract hadoop, set JAVA_HOME in hadoop-env.sh, update path
@@ -82,7 +82,7 @@ RUN \
 
 
 # SPARK
-ENV SPARK_VERSION 2.4.3
+ENV SPARK_VERSION 2.4.5
 ENV SPARK_PACKAGE spark-${SPARK_VERSION}-bin-without-hadoop
 ENV SPARK_HOME /usr/spark-${SPARK_VERSION}
 ENV SPARK_DIST_CLASSPATH="$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*"
@@ -95,6 +95,18 @@ RUN curl -sL --retry 3 \
  && chown -R root:root $SPARK_HOME
 
 CMD ["bin/spark-class", "org.apache.spark.deploy.master.Master"]
+
+# install Almond Scala kernel
+ENV ALMOND_VERSION=0.9.1
+RUN curl -sLo /usr/local/bin/coursier https://github.com/coursier/coursier/releases/download/v2.0.0-RC3-2/coursier && \
+    chmod +x /usr/local/bin/coursier && \
+    /usr/local/bin/coursier bootstrap \
+      -r jitpack \
+      -i user -I user:sh.almond:scala-kernel-api_${SCALA_VERSION}:${ALMOND_VERSION} \
+      sh.almond:scala-kernel_${SCALA_VERSION}:${ALMOND_VERSION} \
+      -o /usr/local/bin/almond && \
+    /usr/local/bin/almond --install && \
+    rm -f /usr/local/bin/almond
 
 # update PATH in .bashrc
 RUN echo "export PATH=$PATH" >> /root/.bashrc
@@ -114,15 +126,8 @@ ADD configs/hbase-site.xml $HBASE_HOME/conf
 # copy ssh config
 ADD configs/ssh_config /root/.ssh/config
 
-# copy script to start hadoop
-ADD start-hadoop.sh start-hadoop.sh
-
-# # copy dataset
-# RUN mkdir /dataset
-# ADD dataset/* /dataset/
-
 # expose various ports
 EXPOSE 8088 8030 50070 50075 50030 50060 8888 9000 9999
 
 # start hadoop
-CMD bash start-hadoop.sh
+CMD  bash /home/start-hadoop-hbase-jupyter.sh
