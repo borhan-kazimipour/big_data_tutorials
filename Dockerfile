@@ -127,7 +127,7 @@ COPY configs/hbase-site.xml $HBASE_HOME/conf
 COPY configs/ssh_config /root/.ssh/config
 
 # copy script to start services
-COPY scripts/*sh /home/
+COPY scripts/*sh /home/scripts/
 
 # expose various ports
 EXPOSE 8088 8030 50070 50075 50030 50060 8888 9000 9999
