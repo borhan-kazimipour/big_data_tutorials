@@ -3,5 +3,8 @@
 
 # Allow files and directories
 !start-hadoop.sh
+!start-hbase.sh
+!start-hadoop-jupyter.sh 
+!start-hadoop-hbase-jupyter.sh
 !configs/**
 !scripts/**
