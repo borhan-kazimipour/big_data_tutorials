@@ -126,6 +126,12 @@ ADD configs/hbase-site.xml $HBASE_HOME/conf
 # copy ssh config
 ADD configs/ssh_config /root/.ssh/config
 
+# copy script to start services
+ADD start-hadoop.sh               /home/
+ADD start-hbase.sh                /home/
+ADD start-hadoop-jupyter.sh       /home/
+ADD start-hadoop-hbase-jupyter.sh /home/
+
 # expose various ports
 EXPOSE 8088 8030 50070 50075 50030 50060 8888 9000 9999
 
