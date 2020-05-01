@@ -11,14 +11,14 @@ $HADOOP_HOME/sbin/start-dfs.sh
 $HADOOP_HOME/sbin/start-yarn.sh
 $HADOOP_HOME/sbin/mr-jobhistory-daemon.sh start historyserver
 
- 
+
 printf "Try one of these:
 * http://localhost:8088/
 * http://localhost:50070/
 * http://localhost:50075/
 "
 # keep container running
-# tail -f /dev/null & 
+# tail -f /dev/null &
 # PID=$!
 # i=1
 # sp="/-\|"

@@ -36,7 +36,7 @@ RUN pip3 install --upgrade pip && \
 # download and extract hadoop, set JAVA_HOME in hadoop-env.sh, update path
 ENV HADOOP_VERSION 2.7.3
 RUN \
-  wget  https://archive.apache.org/dist/hadoop/core/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
+  wget -nv https://archive.apache.org/dist/hadoop/core/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
   tar -xzf hadoop-${HADOOP_VERSION}.tar.gz && \
   rm -f hadoop-${HADOOP_VERSION}.tar.gz && \
   mv hadoop-${HADOOP_VERSION} $HADOOP_HOME && \
@@ -47,7 +47,7 @@ ENV PATH $HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
 
 ENV HBASE_VERSION 1.2.4
 RUN \
-  wget  https://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
+  wget -nv https://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
   tar -xzf hbase-${HBASE_VERSION}-bin.tar.gz && \
   rm -f hbase-${HBASE_VERSION}-bin.tar.gz && \
   mv hbase-${HBASE_VERSION} $HBASE_HOME && \
@@ -67,7 +67,7 @@ ENV PATH ~/scala-$SCALA_VERSION/bin:$PATH
 
 # Install sbt
 RUN \
-  curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
+  curl -sLo sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
   dpkg -i sbt-$SBT_VERSION.deb && \
   rm sbt-$SBT_VERSION.deb && \
   apt-get update && \
@@ -118,22 +118,19 @@ RUN \
   chmod 0600 ~/.ssh/authorized_keys
 
 # copy hadoop configs
-ADD configs/*xml $HADOOP_HOME/etc/hadoop/
+COPY configs/*xml $HADOOP_HOME/etc/hadoop/
 
 # copy hbase configs
-ADD configs/hbase-site.xml $HBASE_HOME/conf
+COPY configs/hbase-site.xml $HBASE_HOME/conf
 
 # copy ssh config
-ADD configs/ssh_config /root/.ssh/config
+COPY configs/ssh_config /root/.ssh/config
 
 # copy script to start services
-ADD start-hadoop.sh               /home/
-ADD start-hbase.sh                /home/
-ADD start-hadoop-jupyter.sh       /home/
-ADD start-hadoop-hbase-jupyter.sh /home/
+COPY scripts/*sh /home/
 
 # expose various ports
 EXPOSE 8088 8030 50070 50075 50030 50060 8888 9000 9999
 
-# start hadoop
-CMD  bash /home/start-hadoop-hbase-jupyter.sh
+# start hadoop, hbase, and jupyter
+CMD  bash /home/scripts/start-hadoop-hbase-jupyter.sh
