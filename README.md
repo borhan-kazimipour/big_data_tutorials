@@ -84,14 +84,14 @@ The current version runs Jupyter automatically as you execute `docker run...` di
 
 * Go to interactive mode as discussed above.
 
-* Run `./start-jupyter.sh` if you are in the right path (in this example `/home/`) or enter the following command:
+* Run `./scripts/start-jupyter.sh` if you are in the right path (in this example `/home/`) or enter the following command:
 `jupyter notebook --ip 0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' `
  This starts Jupyter Server and exposes it to port 8888.
 
 * Open your browser and enter and go to
 [http://localhost:8888](http://localhost:8888) .
 
-* Create a Python/Scala Notebook using Python/spylon-kernel Kernel or open an existing notebook.
+* Create a Python/Scala Notebook using **Python** or **spylon-kernel** kernels, or open an existing notebook.
 
 * Write, modify, run as many notebooks as you like. If you put them in the shared path (in this example `/home` folder or subfolder), you can access them via your machine (in this example `c:\Users\borhan\big_data_docker\`)
 
