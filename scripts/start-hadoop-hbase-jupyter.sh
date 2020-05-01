@@ -38,7 +38,7 @@ starting Hadoop ...
 
 
 """
-bash /home/start-hadoop.sh
+bash /home/scripts/start-hadoop.sh
 
 printf """
 starting HBase ...
@@ -53,4 +53,4 @@ starting Jupyter ...
 
 """
 cd /home
-bash /home/start-jupyter.sh
+bash /home/scripts/start-jupyter.sh
